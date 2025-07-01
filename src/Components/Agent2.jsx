@@ -12,12 +12,6 @@ const Agent2 = ({ isAgentDetail, isLoading }) => {
         chain: 0,
         core: 0,
     });
-    const [userAgentLevelSkillBasic, setUserAgentLevelSkillBasic] = useState(0);
-    const [userAgentLevelSkillDodge, setUserAgentLevelSkillDodge] = useState(0);
-    const [userAgentLevelSkillAssist, setUserAgentLevelSkillAssist] = useState(0);
-    const [userAgentLevelSkillSpecial, setUserAgentLevelSkillSpecial] = useState(0);
-    const [userAgentLevelSkillChain, setUserAgentLevelSkillChain] = useState(0);
-    const [userAgentLevelSkillCore, setUserAgentLevelSkillCore] = useState(0);
 
 
     const calculatedAgentStats = useMemo(() => {
@@ -152,41 +146,63 @@ const Agent2 = ({ isAgentDetail, isLoading }) => {
             const currentAgentSkillLevel = userAgentSpecificSkillLevels[categoryName];
 
             if (!Array.isArray(skillsArray) || skillsArray === 0) {
+                console.log('skillsArray has issue!')
                 return null
             };
 
+            let maxScaling = 0; // As default for length of scaling
 
-
-
-            return (
-                <div key={categoryName}>
-                    <h3>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
-                    <input type="range" value={currentAgentSkillLevel} onChange={(event) => handleSliderSpecificSkillLevel(event, categoryName)} id='agentSkillLevel' name='agentSkillLevel' min="0" max="15" step="1" />
-                    {/* Dear future me, you only need to figure out the level of core only now */}
-
-                    {skillsArray.map((skill, index) => {
-                        return (
-                            <div key={index} id={`${categoryName}`}>
-                                <h4>{skill.name ?? `Unnamed Skill`}</h4>
-                                {Array.isArray(skill.scaling) && skill.scaling.length > 0 ? (
-                                    skill.scaling.map((scalingData, scalingIndex) => {
-                                        const scalingName = scalingData[0];
-                                        const scalingValue = scalingData[currentAgentSkillLevel + 1];
-                                        return (
-                                            <div key={scalingIndex}>
-                                                <span>{scalingName}: </span>
-                                                <strong>{scalingValue ?? 'N/A'}</strong>
-                                            </div>
-                                        );
-                                    })
-                                ) : (
-                                    <p>{(skill?.description ?? '').replaceAll('<br />', ' ')}</p>
-                                )}
+            if (categoryName === 'core') {
+                maxScaling = skillsArray[0].scaling[0].length - 1;
+                const scalingName = skillsArray[0].name;
+                const scalingValue = skillsArray[0].scaling[0][currentAgentSkillLevel];
+                return (
+                    <div key={categoryName} id={categoryName}>
+                        <h3>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
+                        <input type="range" value={currentAgentSkillLevel} onChange={(event) => handleSliderSpecificSkillLevel(event, categoryName)} id="agentSkillLevel" name='agentSkillLevel' min="0" max={maxScaling} step="1" />
+                        <div key={categoryName} id={`${categoryName}`}>
+                            <h4>{scalingName ?? `Unnamed Skill`}</h4>
+                            <div>
+                                <p>{skillsArray[0].description}</p>
+                                <p><strong>DMG Multiplier:</strong> {scalingValue}</p>
                             </div>
-                        )
-                    })}
-                </div>
-            )
+                        </div>
+                    </div>
+                )
+            } else {
+
+                return (
+                    <div key={categoryName} id={categoryName}>
+                        <h3>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
+                        <input type="range" value={currentAgentSkillLevel} onChange={(event) => handleSliderSpecificSkillLevel(event, categoryName)} id='agentSkillLevel' name='agentSkillLevel' min="0" max="15" step="1" />
+                        {/* Dear future me, you only need to figure out the level of core only now */}
+
+                        {skillsArray.map((skill, index) => {
+                            return (
+                                <div key={index} id={`${categoryName}`}>
+                                    <h4>{skill.name ?? `Unnamed Skill`}</h4>
+                                    {Array.isArray(skill.scaling) && skill.scaling.length > 0 ? (
+                                        skill.scaling.map((scalingData, scalingIndex) => {
+                                            const scalingName = scalingData[0];
+                                            const scalingValue = scalingData[currentAgentSkillLevel + 1];
+                                            return (
+                                                <div key={scalingIndex}>
+                                                    <span>{scalingName}: </span>
+                                                    <strong>{scalingValue ?? 'N/A'}</strong>
+                                                </div>
+                                            );
+                                        })
+                                    ) : (
+                                        <p>{(skill?.description ?? '').replaceAll('<br />', ' ')}</p>
+                                    )}
+                                </div>
+                            )
+                        })}
+                    </div>
+                )
+            }
+
+
         })
     }, [isAgentDetail, userAgentSpecificSkillLevels]);
 
@@ -227,8 +243,6 @@ const Agent2 = ({ isAgentDetail, isLoading }) => {
         console.log(currentAgentLevel);
     }
 
-
-
     return (
         <div>
             <h1>Agent2: API from Irminsul ZZZ</h1>
@@ -253,6 +267,7 @@ const Agent2 = ({ isAgentDetail, isLoading }) => {
                     <span>Energy Regen: {calculatedAgentStats.agentEnergyRegen}%</span>
                 </div>
             )}
+
             <div className='flex flex-col'>
 
                 <h2>Character Skills</h2>
