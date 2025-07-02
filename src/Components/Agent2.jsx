@@ -127,9 +127,7 @@ const Agent2 = ({ isAgentDetail, isLoading }) => {
         if (!isAgentDetail) {
             return <p>No agent have been choosen.</p>;
         }
-
-
-
+        /*
         const handleSliderAgentSkillLevel = (event) => { // This still need to change since it was universal for all skill and not specific // Done, can be deleted
             if (!isAgentDetail) {
                 return console.log('The agent has not been selected yet.')
@@ -138,7 +136,7 @@ const Agent2 = ({ isAgentDetail, isLoading }) => {
             const levelSkillChange = event.target.value;
             const currentAgentSkill = parseInt(levelSkillChange, 10);
             setUserSliderAgentSkillLevel(currentAgentSkill);
-        }
+        } */
 
 
         return Object.keys(isAgentDetail.skills).map((categoryName) => {
