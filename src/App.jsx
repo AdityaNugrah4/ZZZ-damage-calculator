@@ -8,18 +8,23 @@ import W_Engine from './Components/W_Engine'
 import EquipmentDisc from './Components/EquipmentDisc'
 import Agent from './Components/Agent'
 import Agent2 from './Components/Agent2'
-import { AllCharactersIrminsul } from './Components/zzz-api-irminsul'
+import { AllCharactersIrminsul, AllEnemies, EnemyDetail } from './Components/zzz-api-irminsul'
+import Enemy from './Components/Enemy'
 
 function App() {
 
   const [characterGeneralData, setCharacterGeneralData] = useState({});
   const [isSelectedID, setIsSelectedID] = useState('');
   const [isAgentDetail, setIsAgentDetail] = useState(null);
+  const [enemiesGeneralData, setEnemiesGeneralData] = useState({});
+  const [isEnemiesSelectedID, setIsEnemiesSelectedID] = useState('');
+  const [isEnemiesDetail, setIsEnemiesDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingEnemy, setIsLoadingEnemy] = useState(false);
   const [isError, setIsError] = useState(null);
 
   useEffect(() => {
-    async function firstFecth() { // First fetch the character data to dropdown list
+    async function charactersFirstFecth() { // First fetch the character data to dropdown list
       try {
         setIsError(null);
         setIsLoading(true);
@@ -33,7 +38,7 @@ function App() {
         setIsLoading(false);
       }
     };
-    firstFecth()
+    charactersFirstFecth()
   }, []);
 
   useEffect(() => {
@@ -41,7 +46,7 @@ function App() {
       return setIsAgentDetail(null);
     }
 
-    function secondFetch() { // To fetch the detailed data for agent
+    function charactersSecondFetch() { // To fetch the detailed data for agent
       try {
         setIsError(null);
         setIsLoading(true);
@@ -56,17 +61,63 @@ function App() {
         setIsLoading(false);
       }
     };
-    secondFetch();
+    charactersSecondFetch();
   }, [isSelectedID]);
+
+  useEffect(() => {
+    const firstEnemyFetch = async () => {
+      try {
+        setIsError(null);
+        setIsLoadingEnemy(true);
+        const enemiesListID = await AllEnemies();
+        console.log('Initial fetched data', enemiesListID);
+        setEnemiesGeneralData(enemiesListID);
+      } catch (error) {
+        setIsError(error.message);
+        console.log(error);
+      } finally {
+        setIsLoadingEnemy(false);
+      }
+    }
+    firstEnemyFetch();
+  }, []);
+
+  useEffect(() => {
+    const enemySecondFetch = async () => {
+      if (!isEnemiesSelectedID) {
+        return null
+      }
+
+      try {
+        setIsError(null);
+        setIsLoadingEnemy(true);
+        console.log(isEnemiesSelectedID);
+        const fetchedEnemydetail = await EnemyDetail(isEnemiesSelectedID);
+        console.log(fetchedEnemydetail);
+        setIsEnemiesDetail(fetchedEnemydetail);
+      } catch (error) {
+        setIsError(error.message);
+        console.log(error);
+      } finally {
+        setIsLoadingEnemy(false);
+      }
+    }
+    enemySecondFetch();
+  }, [isEnemiesSelectedID]);
 
   const handleSelectedAgent = (event) => { // handle dropdown list
     setIsSelectedID(event.target.value)
+  }
+
+  const handleSelectedEnemy = (event) => {
+    setIsEnemiesSelectedID(event.target.value);
   }
 
   return (
     <div>
       <div>Hello World</div>
       <div>
+        {/* Agent Selection */}
         <h1>Character</h1>
         <div>
           <select value={isSelectedID} onChange={handleSelectedAgent} disabled={isLoading}>
@@ -86,6 +137,20 @@ function App() {
       <div>
         <h1>Equipment</h1>
         <EquipmentDisc />
+      </div>
+      <div>
+        <h1>Enemy</h1>
+        <div>
+          {/* Enemy Selection */}
+          <select value={isEnemiesSelectedID} onChange={handleSelectedEnemy} disabled={isLoadingEnemy}>
+            <option>--Choose Enemy--</option>
+            {Object.entries(enemiesGeneralData).map(([id, selected]) => (
+              <option value={id} key={id}>{selected.EN}</option>
+            ))}
+          </select>
+          <Enemy isEnemiesDetail={isEnemiesDetail} isLoadingEnemy={isLoadingEnemy} setIsLoadingEnemy={setIsLoadingEnemy} />
+          {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
+        </div>
       </div>
     </div>
   )
