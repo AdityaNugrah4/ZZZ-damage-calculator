@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -8,7 +8,7 @@ import W_Engine from './Components/W_Engine'
 import EquipmentDisc from './Components/EquipmentDisc'
 import Agent from './Components/Agent'
 import Agent2 from './Components/Agent2'
-import { AllCharactersIrminsul, AllEnemies, EnemyDetail } from './Components/zzz-api-irminsul'
+import { AllCharactersIrminsul, AllEnemies, AllEngine, EnemyDetail } from './Components/zzz-api-irminsul'
 import Enemy from './Components/Enemy'
 
 function App() {
@@ -19,8 +19,12 @@ function App() {
   const [enemiesGeneralData, setEnemiesGeneralData] = useState({});
   const [isEnemiesSelectedID, setIsEnemiesSelectedID] = useState('');
   const [isEnemiesDetail, setIsEnemiesDetail] = useState(null);
+  const [wEngineGeneralData, setWEngineGeneralData] = useState({});
+  const [isWEngineSelectedID, setIsWEngineSelectedID] = useState('');
+  const [isWEngineDetail, setIsWEngineDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingEnemy, setIsLoadingEnemy] = useState(false);
+  const [isLoadingWEngine, setIsLoadingWEngine] = useState(false);
   const [isError, setIsError] = useState(null);
 
   useEffect(() => {
@@ -105,13 +109,57 @@ function App() {
     enemySecondFetch();
   }, [isEnemiesSelectedID]);
 
+  useEffect(() => {
+    const wEngineFirstFetch = async () => {
+      try {
+        setIsError(false);
+        setIsLoadingWEngine(true);
+        const listID = await AllEngine();
+        console.log(listID);
+        setWEngineGeneralData(listID);
+      } catch (error) {
+        setIsError(error.message);
+        console.log(error);
+      } finally {
+        setIsLoadingWEngine(false);
+      }
+    }
+    wEngineFirstFetch();
+  }, []);
+
+  useEffect(() => {
+    const WEngineSecondFetch = async () => {
+      if (!isWEngineSelectedID) {
+        return null
+      }
+      try {
+        setIsError(null);
+        setIsLoadingWEngine(true);
+        console.log(isWEngineSelectedID);
+        const fetchedWEngineDetail = await wEngineGeneralData?.[isWEngineSelectedID];
+        console.log(fetchedWEngineDetail);
+        setIsWEngineDetail(fetchedWEngineDetail);
+      } catch (error) {
+        setIsError(error.message);
+        console.log(error);
+      } finally {
+        setIsLoadingWEngine(false);
+      }
+    }
+    WEngineSecondFetch();
+  }, [isWEngineSelectedID])
+
   const handleSelectedAgent = (event) => { // handle dropdown list
     setIsSelectedID(event.target.value)
-  }
+  };
+
+  const handleSelectedWEngine = (event) => {
+    setIsWEngineSelectedID(event.target.value)
+  };
 
   const handleSelectedEnemy = (event) => {
     setIsEnemiesSelectedID(event.target.value);
-  }
+  };
 
   return (
     <div>
@@ -132,6 +180,14 @@ function App() {
       </div>
       <div>
         <h1>W-Engine</h1>
+        <select value={isWEngineSelectedID} onChange={handleSelectedWEngine} disabled={isLoadingWEngine}>
+          <option>-- Choose W-Engine --</option>
+          {Object.entries(wEngineGeneralData).map(([id, wEngine]) => (
+            <option value={id} key={id}>
+              {wEngine.name} Rank-{wEngine.rarity}
+            </option>
+          ))}
+        </select>
         <W_Engine />
       </div>
       <div>
@@ -143,7 +199,7 @@ function App() {
         <div>
           {/* Enemy Selection */}
           <select value={isEnemiesSelectedID} onChange={handleSelectedEnemy} disabled={isLoadingEnemy}>
-            <option>--Choose Enemy--</option>
+            <option>-- Choose Enemy --</option>
             {Object.entries(enemiesGeneralData).map(([id, selected]) => (
               <option value={id} key={id}>{selected.EN}</option>
             ))}

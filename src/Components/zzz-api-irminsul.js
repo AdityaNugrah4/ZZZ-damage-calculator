@@ -11,6 +11,13 @@ export const AllCharactersIrminsul = async () => {
 
 // https://api.irminsul.gg/zzz/weapons.json
 const weaponsURL = "https://api.irminsul.gg/zzz/weapons.json";
+export const AllEngine = async () => {
+    const respond = await fetch(weaponsURL);
+    if (!respond) {
+        throw new Error('Failed to fecth Weapon list.')
+    }
+    return respond.json();
+}
 
 // https://api.irminsul.gg/zzz/bangboos.json
 const bangboosURL = "https://api.irminsul.gg/zzz/bangboos.json";
