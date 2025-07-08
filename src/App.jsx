@@ -188,7 +188,8 @@ function App() {
             </option>
           ))}
         </select>
-        <W_Engine />
+        <W_Engine isWEngineDetail={isWEngineDetail} isLoadingWEngine={isLoadingWEngine} />
+        {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
       </div>
       <div>
         <h1>Equipment</h1>
