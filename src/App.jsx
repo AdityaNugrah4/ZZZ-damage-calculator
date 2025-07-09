@@ -5,11 +5,11 @@ import './App.css'
 import CharacterBaseStats from './Components/CharacterBaseStats'
 import CharacterSkills from './Components/CharacterSkills'
 import W_Engine from './Components/W_Engine'
-import EquipmentDisc from './Components/EquipmentDisc'
 import Agent from './Components/Agent'
 import Agent2 from './Components/Agent2'
-import { AllCharactersIrminsul, AllEnemies, AllEngine, EnemyDetail } from './Components/zzz-api-irminsul'
+import { AllCharactersIrminsul, allDriveDisc, AllEnemies, AllEngine, EnemyDetail } from './Components/zzz-api-irminsul'
 import Enemy from './Components/Enemy'
+import DriveDisc from './Components/DriveDisc'
 
 function App() {
 
@@ -193,7 +193,7 @@ function App() {
       </div>
       <div>
         <h1>Equipment</h1>
-        <EquipmentDisc />
+        <DriveDisc />
       </div>
       <div>
         <h1>Enemy</h1>
