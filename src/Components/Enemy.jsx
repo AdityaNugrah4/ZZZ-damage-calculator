@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
-const Enemy = ({ isEnemiesDetail, isLoadingEnemy }) => {
+const Enemy = ({ isEnemiesDetail, isLoadingEnemy, setEnemiesData }) => {
     const [userSliderEnemyLevel, setUserSliderEnemyLevel] = useState(0);
 
     const calculatedEnemyStats = useMemo(() => {
@@ -30,6 +30,12 @@ const Enemy = ({ isEnemiesDetail, isLoadingEnemy }) => {
         return calculatedStats;
     }, [isEnemiesDetail, userSliderEnemyLevel])
 
+    useEffect(() => {
+        if (calculatedEnemyStats) {
+            setEnemiesData(calculatedEnemyStats)
+        }
+    }, [calculatedEnemyStats])
+
     const handleSliderEnemyLevel = (event) => {
         if (!isEnemiesDetail) {
             return console.log('No enemy has been selected.')
@@ -44,7 +50,7 @@ const Enemy = ({ isEnemiesDetail, isLoadingEnemy }) => {
             {isLoadingEnemy && (<div>Loading</div>)}
             {isEnemiesDetail && (
                 <div className='flex flex-col'>
-                    <h3>{userSliderEnemyLevel + 1}</h3>
+                    <h3>Level {userSliderEnemyLevel + 1}</h3>
                     <input type="range" name="" id="" value={userSliderEnemyLevel} onChange={handleSliderEnemyLevel} min="0" max="99" step="1" />
                     <span>HP: {Math.floor(calculatedEnemyStats.enemyHP)}</span>
                     <span>ATK: {Math.floor(calculatedEnemyStats.enemyATK)}</span>

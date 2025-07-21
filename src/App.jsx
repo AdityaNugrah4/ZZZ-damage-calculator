@@ -26,6 +26,102 @@ function App() {
   const [isLoadingEnemy, setIsLoadingEnemy] = useState(false);
   const [isLoadingWEngine, setIsLoadingWEngine] = useState(false);
   const [isError, setIsError] = useState(null);
+  const [wEngineData, setWEngineData] = useState({
+    baseAttack: 0,
+    level: 0,
+    specialityValue: 0,
+    specialityType: ''
+  });
+  const [enemiesData, setEnemiesData] = useState({
+    enemyHP: 0,
+    enemyATK: 0,
+    enemyDEF: 0,
+    enemyFireDmgRes: 0,
+    enemyPhysicalDmgRes: 0,
+    enemyElectricDmgRes: 0,
+    enemyIceDmgRes: 0,
+    enemyEtherDmgRes: 0
+  })
+  const [isSelectedDriveDisc, setIsSelectedDriveDisc] = useState({
+    disc1: {
+      discType: '',
+      rank: '',
+      level: 0,
+      mainStats: 0,
+      mainType: '',
+      subsStatsParent: {
+        subStats1: { value: 0, subType: '' },
+        subStats2: { value: 0, subType: '' },
+        subStats3: { value: 0, subType: '' },
+        subStats4: { value: 0, subType: '' }
+      },
+    },
+    disc2: {
+      discType: '',
+      rank: '',
+      level: 0,
+      mainStats: 0,
+      mainType: '',
+      subsStatsParent: {
+        subStats1: { value: 0, subType: '' },
+        subStats2: { value: 0, subType: '' },
+        subStats3: { value: 0, subType: '' },
+        subStats4: { value: 0, subType: '' }
+      },
+    },
+    disc3: {
+      discType: '',
+      rank: '',
+      level: 0,
+      mainStats: 0,
+      mainType: '',
+      subsStatsParent: {
+        subStats1: { value: 0, subType: '' },
+        subStats2: { value: 0, subType: '' },
+        subStats3: { value: 0, subType: '' },
+        subStats4: { value: 0, subType: '' }
+      },
+    },
+    disc4: {
+      discType: '',
+      rank: '',
+      level: 0,
+      mainStats: 0,
+      mainType: '',
+      subsStatsParent: {
+        subStats1: { value: 0, subType: '' },
+        subStats2: { value: 0, subType: '' },
+        subStats3: { value: 0, subType: '' },
+        subStats4: { value: 0, subType: '' }
+      },
+    },
+    disc5: {
+      discType: '',
+      rank: '',
+      level: 0,
+      mainStats: 0,
+      mainType: '',
+      subsStatsParent: {
+        subStats1: { value: 0, subType: '' },
+        subStats2: { value: 0, subType: '' },
+        subStats3: { value: 0, subType: '' },
+        subStats4: { value: 0, subType: '' }
+      },
+    },
+    disc6: {
+      discType: '',
+      rank: '',
+      level: 0,
+      mainStats: 0,
+      mainType: '',
+      subsStatsParent: {
+        subStats1: { value: 0, subType: '' },
+        subStats2: { value: 0, subType: '' },
+        subStats3: { value: 0, subType: '' },
+        subStats4: { value: 0, subType: '' }
+      },
+    }
+  });
 
   useEffect(() => {
     async function charactersFirstFecth() { // First fetch the character data to dropdown list
@@ -161,6 +257,66 @@ function App() {
     setIsEnemiesSelectedID(event.target.value);
   };
 
+  // Handlers for driveDisc
+  const handlerDriveDiscRank = (event) => {
+    // const { name, value } = event.target;
+    const discName = event.target.name;
+    const discTier = event.target.value;
+
+    setIsSelectedDriveDisc((disc) => ({
+      ...disc,
+      [discName]: {
+        ...disc[discName],
+        rank: discTier,
+      }
+    }))
+  };
+
+  const handlerDriveDiscMainStats = (event) => {
+    const discName = event.target.name;
+    const discTier = event.target.value;
+    setIsSelectedDriveDisc((disc) => ({
+      ...disc,
+      [discName]: {
+        ...disc[discName],
+        mainStats: discTier,
+      }
+    }))
+  };
+
+  const handlerDriveDiscMainType = (event) => {
+    const discName = event.target.name; // e.g., "disc1"
+    const newType = event.target.value;
+
+    setIsSelectedDriveDisc(prev => ({
+      ...prev,
+      [discName]: {
+        ...prev[discName],
+        mainType: newType
+      }
+    }));
+  };
+
+  const handlerDriveDiscSubstats = (discKey, subKey, field) => (e) => {
+    const newValue = field === 'value' ? Number(e.target.value) : e.target.value;
+    setIsSelectedDriveDisc(disc => ({
+      ...disc,
+      [discKey]: {
+        ...disc[discKey],
+        subsStatsParent: {
+          ...disc[discKey].subsStatsParent,
+          [subKey]: {
+            ...disc[discKey].subsStatsParent[subKey],
+            [field]: newValue
+          }
+        }
+      }
+    }));
+  };
+
+  const isAgentSelected = isAgentDetail !== null;
+
+
   return (
     <div>
       <div>Hello World</div>
@@ -175,12 +331,19 @@ function App() {
             ))}
           </select>
         </div>
-        <Agent2 isAgentDetail={isAgentDetail} isLoading={isLoading} setIsLoading={setIsLoading} />
+        <Agent2
+          isAgentDetail={isAgentDetail}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          isSelectedDriveDisc={isSelectedDriveDisc}
+          wEngineData={wEngineData}
+          enemiesData={enemiesData}
+        />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
       </div>
       <div>
         <h1>W-Engine</h1>
-        <select value={isWEngineSelectedID} onChange={handleSelectedWEngine} disabled={isLoadingWEngine}>
+        <select value={isWEngineSelectedID} onChange={handleSelectedWEngine} disabled={!isAgentSelected || isLoadingWEngine}>
           <option>-- Choose W-Engine --</option>
           {Object.entries(wEngineGeneralData).map(([id, wEngine]) => (
             <option value={id} key={id}>
@@ -188,12 +351,26 @@ function App() {
             </option>
           ))}
         </select>
-        <W_Engine isWEngineDetail={isWEngineDetail} isLoadingWEngine={isLoadingWEngine} />
+        <W_Engine
+          isWEngineDetail={isWEngineDetail}
+          isLoadingWEngine={isLoadingWEngine}
+          wEngineData={wEngineData}
+          setWEngineData={setWEngineData}
+          isEnabled={isAgentSelected}
+        />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
       </div>
       <div>
         <h1>Equipment</h1>
-        <DriveDisc />
+        <DriveDisc
+          setIsSelectedDriveDisc={setIsSelectedDriveDisc}
+          isSelectedDriveDisc={isSelectedDriveDisc}
+          handlerDriveDiscRank={handlerDriveDiscRank}
+          handlerDriveDiscMainStats={handlerDriveDiscMainStats}
+          handlerDriveDiscMainType={handlerDriveDiscMainType}
+          handlerDriveDiscSubstats={handlerDriveDiscSubstats}
+          isEnabled={isAgentSelected}
+        />
       </div>
       <div>
         <h1>Enemy</h1>
@@ -205,7 +382,12 @@ function App() {
               <option value={id} key={id}>{selected.EN}</option>
             ))}
           </select>
-          <Enemy isEnemiesDetail={isEnemiesDetail} isLoadingEnemy={isLoadingEnemy} setIsLoadingEnemy={setIsLoadingEnemy} />
+          <Enemy
+            isEnemiesDetail={isEnemiesDetail}
+            isLoadingEnemy={isLoadingEnemy}
+            setIsLoadingEnemy={setIsLoadingEnemy}
+            setEnemiesData={setEnemiesData}
+          />
           {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
         </div>
       </div>
