@@ -105,7 +105,7 @@ const Agent = () => {
 
 
     return (
-        <div>
+        <div className='page-container'>
             {/* Second is to create a menu to select which agent id to be use to fetch the detailed data */}
             <div>
                 <select value={isSelectedID} onChange={handleSelectedAgent} disabled={isLoading}>

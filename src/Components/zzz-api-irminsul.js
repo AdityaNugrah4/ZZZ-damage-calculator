@@ -23,6 +23,13 @@ export const AllEngine = async () => {
 const bangboosURL = "https://api.irminsul.gg/zzz/bangboos.json";
 
 const driveDiscsURL = "https://api.irminsul.gg/zzz/drive-discs.json";
+export const allDriveDisc = async () => {
+    const respond = await fetch(driveDiscsURL);
+    if (!respond) {
+        throw new Error('Failed to fecth Weapon list.')
+    }
+    return respond.json();
+}
 
 const characterBannersURL = "https://api.irminsul.gg/zzz/character-banners.json";
 const weaponBannersURL = "https://api.irminsul.gg/zzz/weapon-banners.json";

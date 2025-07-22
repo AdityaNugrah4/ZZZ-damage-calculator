@@ -46,7 +46,7 @@ const Enemy = ({ isEnemiesDetail, isLoadingEnemy, setEnemiesData }) => {
     }
 
     return (
-        <div>
+        <fieldset>
             {isLoadingEnemy && (<div>Loading</div>)}
             {isEnemiesDetail && (
                 <div className='flex flex-col'>
@@ -62,7 +62,7 @@ const Enemy = ({ isEnemiesDetail, isLoadingEnemy, setEnemiesData }) => {
                     <span>Ether RES: {calculatedEnemyStats.enemyEtherDmgRes}%</span>
                 </div>
             )}
-        </div>
+        </fieldset>
     )
 }
 

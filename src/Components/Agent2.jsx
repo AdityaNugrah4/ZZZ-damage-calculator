@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { h2ClassColour } from './ResponsiveColour';
 
 const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, enemiesData }) => {
 
@@ -13,7 +14,7 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         core: 0,
     });
 
-    const calculatedAgentStats = useMemo(() => {
+    const calculatedStats = useMemo(() => {
         if (!isAgentDetail?.stats) {
             return null
         };
@@ -25,7 +26,7 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             return {};
         };
 
-        const calculatedStats = {
+        const agentBaseStats = {
             agentHP: isAgentDetail?.stats?.hp?.[userSliderAgentLevel], // ascension
             agentAttack: isAgentDetail?.stats?.atk?.[userSliderAgentLevel], // ascension
             agentDefence: isAgentDetail?.stats?.def?.[userSliderAgentLevel], // ascension
@@ -36,6 +37,21 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             agentAnomalyProficiency: isAgentDetail?.stats?.ap?.[userSliderAgentLevel], // ascension
             agentPenetration: (isAgentDetail?.stats?.pen?.[userSliderAgentLevel] ?? 0) / 100,
             agentEnergyRegen: (isAgentDetail?.stats?.er?.[userSliderAgentLevel] ?? 0) / 100, // ascension
+        }
+
+        return agentBaseStats;
+    }, [isAgentDetail, userSliderAgentLevel, isSelectedDriveDisc, wEngineData])
+
+    const calculatedAgentStats = useMemo(() => {
+        if (!isAgentDetail?.stats) {
+            return null
+        };
+
+        console.log(isAgentDetail.stats.hp);
+        const { stats } = isAgentDetail;
+
+        if (userSliderAgentLevel < 0 || userSliderAgentLevel >= (stats.hp?.length ?? 0)) {
+            return {};
         };
 
         const { ascension } = stats;
@@ -140,16 +156,16 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         calculatedStats.agentDefence += totalFromDisc["DEF"];
         calculatedStats.agentHP += totalFromDisc["HP"];
 
-        calculatedStats.agentAttack += calculatedStats.agentAttack * (1 + (totalFromDisc["ATK%"] / 100));
-        calculatedStats.agentDefence += calculatedStats.agentDefence * (1 + (totalFromDisc["DEF%"] / 100));
-        calculatedStats.agentHP += calculatedStats.agentHP * (1 + (totalFromDisc["HP%"] / 100));
+        calculatedStats.agentAttack += calculatedStats.agentAttack * ((totalFromDisc["ATK%"] / 100));
+        calculatedStats.agentDefence += calculatedStats.agentDefence * ((totalFromDisc["DEF%"] / 100));
+        calculatedStats.agentHP += calculatedStats.agentHP * ((totalFromDisc["HP%"] / 100));
 
-        calculatedStats.agentCritRate += calculatedStats.agentCritRate * (1 + totalFromDisc['CRIT Rate%'] / 100);
-        calculatedStats.agentCritDamage += calculatedStats.agentCritDamage * (1 + totalFromDisc['CRIT DMG%'] / 100);
-        calculatedStats.agentPenetration += calculatedStats.agentPenetration * (1 + totalFromDisc['PEN Ratio'] / 100);
-        calculatedStats.agentImpact += (calculatedStats.agentImpact * (1 + totalFromDisc['Impact%'] / 100)); // Impact %
-        calculatedStats.agentEnergyRegen += calculatedStats.agentEnergyRegen * (1 + totalFromDisc['Energy Regen%'] / 100); // Energy Regen %
-        calculatedStats.agentAnomalyMastery += calculatedStats.agentAnomalyMastery * (1 + totalFromDisc['Anomaly Mastery%'] / 100); // Anomaly Mastery %
+        calculatedStats.agentCritRate += calculatedStats.agentCritRate * (totalFromDisc['CRIT Rate%'] / 100);
+        calculatedStats.agentCritDamage += calculatedStats.agentCritDamage * (totalFromDisc['CRIT DMG%'] / 100);
+        calculatedStats.agentPenetration += calculatedStats.agentPenetration * (totalFromDisc['PEN Ratio'] / 100);
+        calculatedStats.agentImpact += (calculatedStats.agentImpact * (totalFromDisc['Impact%'] / 100)); // Impact %
+        calculatedStats.agentEnergyRegen += calculatedStats.agentEnergyRegen * (totalFromDisc['Energy Regen%'] / 100); // Energy Regen %
+        calculatedStats.agentAnomalyMastery += calculatedStats.agentAnomalyMastery * (totalFromDisc['Anomaly Mastery%'] / 100); // Anomaly Mastery %
         calculatedStats.agentAnomalyProficiency += totalFromDisc['Anomaly Proficiency']; // Flat Anomaly Proficiency
 
         /*function arrayIndex(i) {
@@ -228,13 +244,13 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                 const scalingValue = skillsArray[0].scaling[0][currentAgentSkillLevel];
                 return (
                     <div key={categoryName} id={categoryName}>
-                        <h3>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
+                        <h3 className='character-skills'>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
                         <input type="range" value={currentAgentSkillLevel} onChange={(event) => handleSliderSpecificSkillLevel(event, categoryName)} id="agentSkillLevel" name='agentSkillLevel' min="0" max={maxScaling} step="1" />
                         <div key={categoryName} id={`${categoryName}`}>
-                            <h4>{scalingName ?? `Unnamed Skill`}</h4>
+                            <h4 className='character-skills'>{scalingName ?? `Unnamed Skill`}</h4>
                             <div>
                                 <p>{skillsArray[0].description}</p>
-                                <p><strong>DMG Multiplier:</strong> {Math.floor(calculatedAgentStats.agentAttack * (Number(scalingValue.replace('%', '')) / 100))}</p>
+                                <p><strong>DMG Multiplier:</strong> {Math.floor(calculatedStats.agentAttack * (Number(scalingValue.replace('%', '')) / 100))}</p>
                             </div>
                         </div>
                     </div>
@@ -243,14 +259,14 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
 
                 return (
                     <div key={categoryName} id={categoryName}>
-                        <h3>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
+                        <h3 className='character-skills'>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
 
                         <input type="range" value={currentAgentSkillLevel} onChange={(event) => handleSliderSpecificSkillLevel(event, categoryName)} id='agentSkillLevel' name='agentSkillLevel' min="0" max="15" step="1" />
                         {/* Dear future me, you only need to figure out the level of core only now => Done */}
                         {skillsArray.map((skill, index) => {
                             return (
                                 <div key={index} id={`${categoryName}`}>
-                                    <h4>{skill.name ?? `Unnamed Skill`}</h4>
+                                    <h4 className='character-skills'>{skill.name ?? `Unnamed Skill`}</h4>
                                     {Array.isArray(skill.scaling) && skill.scaling.length > 0 ? (
                                         skill.scaling.map((scalingData, scalingIndex) => {
                                             const scalingName = scalingData[0];
@@ -258,7 +274,7 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                                             return (
                                                 <div key={scalingIndex}>
                                                     <span>{scalingName}: </span>
-                                                    <strong>{Math.floor(calculatedAgentStats.agentAttack * (Number(scalingValue.replace('%', '')) / 100)) ?? 'N/A'}</strong>
+                                                    <strong>{Math.floor(calculatedStats.agentAttack * (Number(scalingValue.replace('%', '')) / 100)) ?? 'N/A'}</strong>
                                                 </div>
                                             );
                                         })
@@ -272,7 +288,7 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                 )
             }
         })
-    }, [isAgentDetail, userAgentSpecificSkillLevels]);
+    }, [isAgentDetail, userAgentSpecificSkillLevels, userSliderAgentLevel, wEngineData]);
 
     // const calculatingAscensionSpecificStat = useMemo(() => {
     //     if (!isAgentDetail?.stats?.ascension) {
@@ -309,11 +325,18 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         const currentAgentLevel = parseInt(levelAgentChange, 10);
         setUserSliderAgentLevel(currentAgentLevel);
         console.log(currentAgentLevel);
-    }
+    };
+
+    useEffect(() => {
+        h2ClassColour(isAgentDetail?.colors);
+        console.log(isAgentDetail?.colors?.accent);
+        console.log(isAgentDetail?.colors?.primary);
+        console.log(isAgentDetail?.colors?.secondary);
+    }, [isAgentDetail])
 
     return (
-        <div>
-            <h1>Agent2: API from Irminsul ZZZ</h1>
+        <fieldset>
+            <h1>Agent Stats</h1> {/* Agent2: API from Irminsul ZZZ */}
             <hr />
             {isLoading && (<div>Loading</div>)}
 
@@ -373,7 +396,7 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                     })}
                 </div> */}
             </div>
-        </div>
+        </fieldset>
     )
 }
 

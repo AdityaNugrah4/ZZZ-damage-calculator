@@ -2,17 +2,16 @@ import React, { use, useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import CharacterBaseStats from './Components/CharacterBaseStats'
-import CharacterSkills from './Components/CharacterSkills'
 import W_Engine from './Components/W_Engine'
-import Agent from './Components/Agent'
 import Agent2 from './Components/Agent2'
 import { AllCharactersIrminsul, allDriveDisc, AllEnemies, AllEngine, EnemyDetail } from './Components/zzz-api-irminsul'
 import Enemy from './Components/Enemy'
 import DriveDisc from './Components/DriveDisc'
+import WelcomePage from './Components/WelcomePage'
+import Header from './Components/Header'
+import Footer from './Components/Footer'
 
 function App() {
-
   const [characterGeneralData, setCharacterGeneralData] = useState({});
   const [isSelectedID, setIsSelectedID] = useState('');
   const [isAgentDetail, setIsAgentDetail] = useState(null);
@@ -319,8 +318,9 @@ function App() {
 
   return (
     <div>
-      <div>Hello World</div>
-      <div>
+      <Header />
+      <WelcomePage isAgentDetail={isAgentDetail} />
+      <div className='page-container'>
         {/* Agent Selection */}
         <h1>Character</h1>
         <div>
@@ -341,7 +341,7 @@ function App() {
         />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
       </div>
-      <div>
+      <div className='page-container'>
         <h1>W-Engine</h1>
         <select value={isWEngineSelectedID} onChange={handleSelectedWEngine} disabled={!isAgentSelected || isLoadingWEngine}>
           <option>-- Choose W-Engine --</option>
@@ -360,7 +360,7 @@ function App() {
         />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
       </div>
-      <div>
+      <div className='page-container'>
         <h1>Equipment</h1>
         <DriveDisc
           setIsSelectedDriveDisc={setIsSelectedDriveDisc}
@@ -372,7 +372,7 @@ function App() {
           isEnabled={isAgentSelected}
         />
       </div>
-      <div>
+      <div className='page-container'>
         <h1>Enemy</h1>
         <div>
           {/* Enemy Selection */}
@@ -391,6 +391,7 @@ function App() {
           {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
         </div>
       </div>
+      <Footer />
     </div>
   )
 }
