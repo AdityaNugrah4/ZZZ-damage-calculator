@@ -10,6 +10,8 @@ import DriveDisc from './Components/DriveDisc'
 import WelcomePage from './Components/WelcomePage'
 import Header from './Components/Header'
 import Footer from './Components/Footer'
+import DescriptionPage from './Components/DescriptionPage'
+import Background1 from './Components/Background1'
 
 function App() {
   const [characterGeneralData, setCharacterGeneralData] = useState({});
@@ -319,7 +321,8 @@ function App() {
   return (
     <div>
       <Header />
-      <WelcomePage isAgentDetail={isAgentDetail} />
+      <WelcomePage />
+      <DescriptionPage />
       <div className='page-container'>
         {/* Agent Selection */}
         <h1>Character</h1>
@@ -392,6 +395,7 @@ function App() {
         </div>
       </div>
       <Footer />
+      <Background1 isAgentDetail={isAgentDetail} />
     </div>
   )
 }

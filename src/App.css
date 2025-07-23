@@ -34,10 +34,14 @@ input {
 
 fieldset {
   border-radius: 10px;
+  background: linear-gradient(90deg, var(--main-bg-colour-1) 30%, var(--main-bg-colour-2) 100%);
+  z-index: 10;
 }
 
 .page-container {
   margin: 0 2vw;
+  left: 0;
+  width: 50vw;
 }
 
 .character-skills {
@@ -55,37 +59,50 @@ footer {
 }
 
 .ticker {
-  font-size: 15px;
+  font-size: 85px;
+  font-weight: bolder;
   padding-block: 8px;
-  border-block: 1px solid;
   overflow: hidden;
   user-select: none;
   display: flex;
-  --gap: 20px;
+  --gap: 0px;
   gap: var(--gap);
 }
 
 .ticker ul {
+  margin: 2px 0;
+  font-size: larger;
   list-style: none;
   flex-shrink: 0;
   min-width: 100%;
   display: flex;
-  justify-content: space-around;
-  gap: 2rem;
+  justify-content: space-evenly;
   align-items: center;
-  background-color: #fd802f;
+  background: var(--secondary-bg-colour-2);
 
-  animation: scroll 20s linear infinite;
+  animation: scroll 10s linear infinite;
   gap: var(--gap);
 }
 
-.ticker ul:first-child {
-  background-color: aqua;
+.background1 {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
 }
 
-.ticker ul:last-child {
-  background-color: blueviolet;
+.background1 div:first-child {
+  color: var(--agent-accent-color);
 }
+
+.background1 div:nth-child(2) {
+  color: var(--agent-primary-color);
+}
+
+.background1 div:last-child {
+  color: var(--agent-secondary-color);
+}
+
 
 /* :root[data-theme="myTheme"] {
   --animate-disc-spin: disc 30s infinite linear;
@@ -94,7 +111,7 @@ footer {
 } */
 
 @keyframes scroll {
-  to {
+  from {
     transform: translateX(calc(-100% - var(--gap)));
   }
 }
