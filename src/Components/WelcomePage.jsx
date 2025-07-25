@@ -4,8 +4,8 @@ import React from 'react'
 
 const WelcomePage = () => {
     return (
-        <div>
-            <h1>Welcome to Zenless Zone Zero Damage Calculator</h1>
+        <div className='welcome-page'>
+            <h1><span>WELCOME TO</span> <span>ZENLESS ZONE ZERO</span> <span>DAMAGE CALCULATOR</span></h1>
             <h3>Version (Beta) 0.0.25.1 </h3>
         </div>
     )

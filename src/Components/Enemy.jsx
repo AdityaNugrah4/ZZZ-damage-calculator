@@ -50,16 +50,36 @@ const Enemy = ({ isEnemiesDetail, isLoadingEnemy, setEnemiesData }) => {
             {isLoadingEnemy && (<div>Loading</div>)}
             {isEnemiesDetail && (
                 <div className='flex flex-col'>
-                    <h3>Level {userSliderEnemyLevel + 1}</h3>
+                    <h3>Enemy's Description</h3>
+                    <p>{isEnemiesDetail ? isEnemiesDetail?.Desc : 'Choose Enemy'}</p>
+                    <h4 className='level-class'><span>Level</span> <span>{userSliderEnemyLevel + 1}</span></h4>
                     <input type="range" name="" id="" value={userSliderEnemyLevel} onChange={handleSliderEnemyLevel} min="0" max="99" step="1" />
-                    <span>HP: {Math.floor(calculatedEnemyStats.enemyHP)}</span>
-                    <span>ATK: {Math.floor(calculatedEnemyStats.enemyATK)}</span>
-                    <span>DEF: {Math.floor(calculatedEnemyStats.enemyDEF)}</span>
-                    <span>Physical RES: {calculatedEnemyStats.enemyPhysicalDmgRes}%</span>
-                    <span>FIre RES: {calculatedEnemyStats.enemyFireDmgRes}%</span>
-                    <span>Electric RES: {calculatedEnemyStats.enemyElectricDmgRes}%</span>
-                    <span>Ice RES: {calculatedEnemyStats.enemyIceDmgRes}%</span>
-                    <span>Ether RES: {calculatedEnemyStats.enemyEtherDmgRes}%</span>
+                    <div className='main-stats'>
+                        <div className="character-skills-name">
+                            <span>HP:</span> {Math.floor(calculatedEnemyStats.enemyHP)}
+                        </div>
+                        <div className="character-skills-name">
+                            <span>ATK:</span> {Math.floor(calculatedEnemyStats.enemyATK)}
+                        </div>
+                        <div className="character-skills-name">
+                            <span>DEF:</span> {Math.floor(calculatedEnemyStats.enemyDEF)}
+                        </div>
+                        <div className="character-skills-name">
+                            <span>Physical RES:</span> {calculatedEnemyStats.enemyPhysicalDmgRes}%
+                        </div>
+                        <div className="character-skills-name">
+                            <span>Fire RES:</span> {calculatedEnemyStats.enemyFireDmgRes}%
+                        </div>
+                        <div className="character-skills-name">
+                            <span>Electric RES:</span> {calculatedEnemyStats.enemyElectricDmgRes}%
+                        </div>
+                        <div className="character-skills-name">
+                            <span>Ice RES:</span> {calculatedEnemyStats.enemyIceDmgRes}%
+                        </div>
+                        <div className="character-skills-name">
+                            <span>Ether RES:</span> {calculatedEnemyStats.enemyEtherDmgRes}%
+                        </div>
+                    </div>
                 </div>
             )}
         </fieldset>

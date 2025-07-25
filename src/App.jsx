@@ -12,6 +12,7 @@ import Header from './Components/Header'
 import Footer from './Components/Footer'
 import DescriptionPage from './Components/DescriptionPage'
 import Background1 from './Components/Background1'
+import Background2 from './Components/Background2'
 
 function App() {
   const [characterGeneralData, setCharacterGeneralData] = useState({});
@@ -317,17 +318,16 @@ function App() {
 
   const isAgentSelected = isAgentDetail !== null;
 
-
   return (
     <div>
       <Header />
       <WelcomePage />
       <DescriptionPage />
+      {/* Agent Selection */}
       <div className='page-container'>
-        {/* Agent Selection */}
-        <h1>Character</h1>
-        <div>
-          <select value={isSelectedID} onChange={handleSelectedAgent} disabled={isLoading}>
+        <div className='page-control'>
+          <h1>CHARACTER</h1>
+          <select value={isSelectedID} onChange={handleSelectedAgent} disabled={isLoading} className='main-select'>
             <option> -- Choose -- </option>
             {Object.entries(characterGeneralData).map(([id, agentId]) => (
               <option value={id} key={id}>{agentId.name}</option>
@@ -344,16 +344,19 @@ function App() {
         />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
       </div>
+      {/* W-Engine */}
       <div className='page-container'>
-        <h1>W-Engine</h1>
-        <select value={isWEngineSelectedID} onChange={handleSelectedWEngine} disabled={!isAgentSelected || isLoadingWEngine}>
-          <option>-- Choose W-Engine --</option>
-          {Object.entries(wEngineGeneralData).map(([id, wEngine]) => (
-            <option value={id} key={id}>
-              {wEngine.name} Rank-{wEngine.rarity}
-            </option>
-          ))}
-        </select>
+        <div className='page-control'>
+          <h1>W-ENGINE</h1>
+          <select value={isWEngineSelectedID} onChange={handleSelectedWEngine} disabled={!isAgentSelected || isLoadingWEngine} className='main-select'>
+            <option>-- Choose W-Engine --</option>
+            {Object.entries(wEngineGeneralData).map(([id, wEngine]) => (
+              <option value={id} key={id}>
+                {wEngine.name} Rank-{wEngine.rarity}
+              </option>
+            ))}
+          </select>
+        </div>
         <W_Engine
           isWEngineDetail={isWEngineDetail}
           isLoadingWEngine={isLoadingWEngine}
@@ -363,8 +366,11 @@ function App() {
         />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
       </div>
+      {/* Drive Disc */}
       <div className='page-container'>
-        <h1>Equipment</h1>
+        <div className='page-control'>
+          <h1>EQUIPMENT</h1>
+        </div>
         <DriveDisc
           setIsSelectedDriveDisc={setIsSelectedDriveDisc}
           isSelectedDriveDisc={isSelectedDriveDisc}
@@ -375,27 +381,28 @@ function App() {
           isEnabled={isAgentSelected}
         />
       </div>
+      {/* Enemy */}
       <div className='page-container'>
-        <h1>Enemy</h1>
-        <div>
-          {/* Enemy Selection */}
-          <select value={isEnemiesSelectedID} onChange={handleSelectedEnemy} disabled={isLoadingEnemy}>
+        <div className='page-control'>
+          <h1>Enemy</h1>
+          <select value={isEnemiesSelectedID} onChange={handleSelectedEnemy} disabled={isLoadingEnemy} className='main-select'>
             <option>-- Choose Enemy --</option>
             {Object.entries(enemiesGeneralData).map(([id, selected]) => (
               <option value={id} key={id}>{selected.EN}</option>
             ))}
           </select>
-          <Enemy
-            isEnemiesDetail={isEnemiesDetail}
-            isLoadingEnemy={isLoadingEnemy}
-            setIsLoadingEnemy={setIsLoadingEnemy}
-            setEnemiesData={setEnemiesData}
-          />
-          {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
         </div>
+        <Enemy
+          isEnemiesDetail={isEnemiesDetail}
+          isLoadingEnemy={isLoadingEnemy}
+          setIsLoadingEnemy={setIsLoadingEnemy}
+          setEnemiesData={setEnemiesData}
+        />
+        {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
       </div>
-      <Footer />
+      <Background2 />
       <Background1 isAgentDetail={isAgentDetail} />
+      <Footer />
     </div>
   )
 }

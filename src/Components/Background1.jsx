@@ -1,18 +1,68 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { h2ClassColour } from './ResponsiveColour';
 
 const Background1 = ({ isAgentDetail }) => {
+    function renderSpans(text, placeholder, count = 3) {
+        const display = text ?? placeholder
+        const spans = [];
+        for (let i = 0; i < count; i++) {
+            spans.push(<span key={i}>{display}</span>);
+        }
+        return spans;
+    };
+
+    // controlling 
+    useEffect(() => {
+        h2ClassColour(isAgentDetail?.colors);
+        console.log(isAgentDetail?.colors?.accent);
+        console.log(isAgentDetail?.colors?.primary);
+        console.log(isAgentDetail?.colors?.secondary);
+    }, [isAgentDetail])
+
     return (
         <div className='background1'>
             <div className='ticker'>
                 <ul>
-                    <li>{isAgentDetail?.fullName}</li>
-                    <li>{isAgentDetail?.fullName}</li>
-                    <li>{isAgentDetail?.fullName}</li>
+                    <li>
+                        {renderSpans(isAgentDetail?.fullName.toUpperCase(), "Agent Name")}
+                    </li>
+                    <li>
+                        {renderSpans(isAgentDetail?.fullName.toUpperCase(), "Agent Name")}
+                    </li>
                 </ul>
                 <ul aria-hidden="false">
-                    <li>{isAgentDetail?.fullName}</li>
-                    <li>{isAgentDetail?.fullName}</li>
-                    <li>{isAgentDetail?.fullName}</li>
+                    <li>
+                        {renderSpans(isAgentDetail?.fullName.toUpperCase(), "Agent Name")}
+                    </li>
+                    <li>
+                        {renderSpans(isAgentDetail?.fullName.toUpperCase(), "Agent Name")}
+                    </li>
+                </ul>
+            </div>
+            <div className='ticker'>
+                <ul>
+                    <li>
+                        {renderSpans(isAgentDetail?.faction.toUpperCase(), "Faction")}
+                    </li>
+                    <li>
+                        {renderSpans(isAgentDetail?.faction.toUpperCase(), "Faction")}
+                    </li>
+                </ul>
+                <ul aria-hidden="false">
+                    <li>
+                        {renderSpans(isAgentDetail?.faction.toUpperCase(), "Faction")}
+                    </li>
+                    <li>
+                        {renderSpans(isAgentDetail?.faction.toUpperCase(), "Faction")}
+                    </li>
+                </ul>
+            </div>
+            <div className='ticker'>
+                <ul>
+                    <li>{renderSpans(isAgentDetail?.element.toUpperCase(), "Element", 6)}</li>
+                </ul>
+                <ul aria-hidden="false">
+                    <li>{renderSpans(isAgentDetail?.element.toUpperCase(), "Element", 6)}</li>
                 </ul>
             </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { h2ClassColour } from './ResponsiveColour';
+import { skillsIcon } from './SkillsIcon';
 
 const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, enemiesData }) => {
 
@@ -149,7 +149,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             };
         } else return null;
 
-
         // Stats calculated from Disc Drive and W-Engine
         console.log('Total from all disc drive:', totalFromDisc);
         calculatedStats.agentAttack += totalFromDisc["ATK"];
@@ -190,7 +189,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         return calculatedStats;
     }, [isAgentDetail, userSliderAgentLevel, isSelectedDriveDisc, wEngineData]);
 
-
     const scalledAgentLevel = useMemo(() => {
         const scalledLevel = ['1/10', '10/10', '10/20', '20/20', '20/30', '30/30', '30/40', '40/40', '40/50', '50/50', '50/60', '60/60'];
         const calculatedLevel = scalledLevel[userSliderAgentLevel]
@@ -213,7 +211,7 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
 
     const skillsAgentSection = useMemo(() => {
         if (!isAgentDetail) {
-            return <p>No agent have been choosen.</p>;
+            return <p className='agent-not-selected'>No agent have been choosen.</p>;
         }
 
         const handleSliderAgentSkillLevel = (event) => { // This still need to change since it was universal for all skill and not specific // Done, can be deleted
@@ -225,7 +223,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             const currentAgentSkill = parseInt(levelSkillChange, 10);
             setUserSliderAgentSkillLevel(currentAgentSkill);
         }
-
 
         return Object.keys(isAgentDetail.skills).map((categoryName) => {
             const skillsArray = isAgentDetail.skills[categoryName];
@@ -244,11 +241,17 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                 const scalingValue = skillsArray[0].scaling[0][currentAgentSkillLevel];
                 return (
                     <div key={categoryName} id={categoryName}>
-                        <h3 className='character-skills'>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
+                        <div className='agent-skill-name'>
+                            <img src={skillsIcon.core} alt={categoryName} />
+                            <h3 className='character-skills-title'>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
+                        </div>
+                        <h4 className='level-class'>
+                            <span>Skill Level</span> <span>{currentAgentSkillLevel + 1}</span>
+                        </h4>
                         <input type="range" value={currentAgentSkillLevel} onChange={(event) => handleSliderSpecificSkillLevel(event, categoryName)} id="agentSkillLevel" name='agentSkillLevel' min="0" max={maxScaling} step="1" />
                         <div key={categoryName} id={`${categoryName}`}>
-                            <h4 className='character-skills'>{scalingName ?? `Unnamed Skill`}</h4>
-                            <div>
+                            <h4 className='character-skills-title'>{scalingName ?? `Unnamed Skill`}</h4>
+                            <div className='character-skills-name core'>
                                 <p>{skillsArray[0].description}</p>
                                 <p><strong>DMG Multiplier:</strong> {Math.floor(calculatedStats.agentAttack * (Number(scalingValue.replace('%', '')) / 100))}</p>
                             </div>
@@ -256,34 +259,40 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                     </div>
                 )
             } else {
-
+                const displayIcon = skillsIcon[categoryName];
                 return (
                     <div key={categoryName} id={categoryName}>
-                        <h3 className='character-skills'>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
-
+                        <div className='agent-skill-name'>
+                            <img src={displayIcon} alt={categoryName} />
+                            <h3 className='character-skills-title'>{categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}</h3>
+                        </div>
+                        <h4 className='level-class'>
+                            <span>Skill Level</span> <span>{currentAgentSkillLevel + 1}</span>
+                        </h4>
                         <input type="range" value={currentAgentSkillLevel} onChange={(event) => handleSliderSpecificSkillLevel(event, categoryName)} id='agentSkillLevel' name='agentSkillLevel' min="0" max="15" step="1" />
                         {/* Dear future me, you only need to figure out the level of core only now => Done */}
                         {skillsArray.map((skill, index) => {
                             return (
                                 <div key={index} id={`${categoryName}`}>
-                                    <h4 className='character-skills'>{skill.name ?? `Unnamed Skill`}</h4>
+                                    <h4 className='character-skills-title'>{skill.name ?? `Unnamed Skill`}</h4>
                                     {Array.isArray(skill.scaling) && skill.scaling.length > 0 ? (
                                         skill.scaling.map((scalingData, scalingIndex) => {
                                             const scalingName = scalingData[0];
                                             const scalingValue = scalingData[currentAgentSkillLevel + 1];
                                             return (
-                                                <div key={scalingIndex}>
+                                                <div key={scalingIndex} className='character-skills-name'>
                                                     <span>{scalingName}: </span>
                                                     <strong>{Math.floor(calculatedStats.agentAttack * (Number(scalingValue.replace('%', '')) / 100)) ?? 'N/A'}</strong>
                                                 </div>
                                             );
                                         })
                                     ) : (
-                                        <p>{(skill?.description ?? '').replaceAll('<br />', ' ')}</p>
+                                        <span>{(skill?.description ?? '').replaceAll('<br />', ' ')}</span>
                                     )}
                                 </div>
                             )
                         })}
+                        <hr />
                     </div>
                 )
             }
@@ -327,35 +336,65 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         console.log(currentAgentLevel);
     };
 
-    useEffect(() => {
-        h2ClassColour(isAgentDetail?.colors);
-        console.log(isAgentDetail?.colors?.accent);
-        console.log(isAgentDetail?.colors?.primary);
-        console.log(isAgentDetail?.colors?.secondary);
-    }, [isAgentDetail])
+    // function card(index) {
+    //     const list = [];
+    //     for (let i = 0; i < 3; i++) {
+    //         list.push(<span key={i}>{index}</span>)
+    //     }
+    //     return list
+    // };
 
     return (
         <fieldset>
-            <h1>Agent Stats</h1> {/* Agent2: API from Irminsul ZZZ */}
+            <h1>AGENT STATS</h1> {/* Agent2: API from Irminsul ZZZ */}
             <hr />
             {isLoading && (<div>Loading</div>)}
 
             {isAgentDetail && (
                 <div className='flex flex-col'>
-                    <h3>Agent: {isAgentDetail?.fullName}</h3>
-                    <h2>A.K.A {isAgentDetail?.name}</h2>
-                    <h3>Level {scalledAgentLevel}</h3>
+                    <div className='agent-name-description'>
+                        <h3>Agent: {isAgentDetail?.fullName}</h3>
+                        <h3>{isAgentDetail?.faction.toUpperCase()}</h3>
+                        <h1>{isAgentDetail?.name.toUpperCase()}</h1>
+                        <div className='agent-name-description-card'>
+                            {/* {card(isAgentDetail?.faction.toUpperCase())} */}
+                        </div>
+                    </div>
+                    <h3 className='level-class'><span>Level</span> <span>{scalledAgentLevel}</span></h3>
                     <input type="range" id='agentLevel' name='agentLevel' min="0" max="11" step="1" value={userSliderAgentLevel} onChange={handleSliderAgentLevel} />
-                    <span>HP: {calculatedAgentStats.agentHP}</span>
-                    <span>ATK: {calculatedAgentStats.agentAttack}</span>
-                    <span>DEF: {calculatedAgentStats.agentDefence}</span>
-                    <span>Impact: {calculatedAgentStats.agentImpact}</span>
-                    <span>CRIT Rate: {calculatedAgentStats.agentCritRate}%</span>
-                    <span>CRIT DMG: {calculatedAgentStats.agentCritDamage}%</span>
-                    <span>Anomaly Mastery: {calculatedAgentStats.agentAnomalyMastery}</span>
-                    <span>Amomaly Proficiency: {calculatedAgentStats.agentAnomalyProficiency}</span>
-                    <span>PEN Ratio: {calculatedAgentStats.agentPenetration}%</span>
-                    <span>Energy Regen: {calculatedAgentStats.agentEnergyRegen}%</span>
+                    <div className='main-stats'>
+                        <div className='character-skills-name'>
+                            <span>HP:</span> {calculatedAgentStats.agentHP}
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>ATK:</span> {calculatedAgentStats.agentAttack}
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>DEF:</span> {calculatedAgentStats.agentDefence}
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>Impact:</span> {calculatedAgentStats.agentImpact}
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>CRIT Rate:</span> {calculatedAgentStats.agentCritRate}%
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>CRIT DMG:</span> {calculatedAgentStats.agentCritDamage}%
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>Anomaly Mastery:</span> {calculatedAgentStats.agentAnomalyMastery}
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>Anomaly Proficiency:</span> {calculatedAgentStats.agentAnomalyProficiency}
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>PEN Ratio:</span> {calculatedAgentStats.agentPenetration}%
+                        </div>
+                        <div className='character-skills-name'>
+                            <span>Energy Regen:</span> {calculatedAgentStats.agentEnergyRegen}%
+                        </div>
+                    </div>
+
                 </div>
             )}
 

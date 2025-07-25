@@ -46,7 +46,7 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
     return (
         <fieldset disabled={!isEnabled}>
             {Object.entries(isSelectedDriveDisc).map(([discIndex, discValue]) => (
-                <div key={discIndex} className='flex flex-col'>
+                <div key={discIndex} className='disc-main flex flex-col transition-all'>
                     <label htmlFor={discIndex}><h3>{discIndex}</h3></label>
                     {/* <select name={discIndex} id={discIndex} value={isSelectedDriveDisc[discIndex]} onChange={handlerSliderDriveDiscLevel} disabled={isLoadingDriveDisc}>
                         <option>0</option>
@@ -55,7 +55,7 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
                         <option>3</option>
                     </select> */}
                     <div>
-                        <select name={discIndex} id={discIndex} value={isSelectedDriveDisc[discIndex].rank} onChange={handlerDriveDiscRank}>
+                        <select name={discIndex} id={discIndex} value={isSelectedDriveDisc[discIndex].rank} onChange={handlerDriveDiscRank} className='select-disc-tier'>
                             <option value={null}>-- Select Drive Disc Tier --</option>
                             {Object.entries(driveDiscTier).map(([discKeys, discTier]) => (
                                 <option value={discKeys} key={discKeys} data-field="rank">{discTier.name}</option>
@@ -63,8 +63,8 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
                         </select>
                     </div>
                     <label>
-                        Main Stats
-                        <input name={discIndex} value={discValue.mainStats} type="number" min={0.001} max={10} data-field="mainStats" onChange={handlerDriveDiscMainStats} />
+                        <span>Main Stats:</span>
+                        <input name={discIndex} value={discValue.mainStats} type="number" min={0} max={10} data-field="mainStats" onChange={handlerDriveDiscMainStats} />
                         <select name={`${isSelectedDriveDisc[discIndex]} Type`} value={discValue.mainType} onChange={handlerDriveDiscMainType}>
                             <option>-- Select Stat Type --</option>
                             {mainStatTypes.map(name => (
@@ -72,11 +72,12 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
                             ))}
                         </select>
                     </label>
+                    <hr />
                     <div>
-                        Sub Stats
+                        <span>Sub Stats:</span>
                         {Object.entries(discValue.subsStatsParent).map(([subsStatsName, subStatValue]) => (
-                            <div key={subsStatsName}>
-                                {subsStatsName}: <input type="number" name={`${discIndex}-${subsStatsName}`} data-parent="subStats" data-child={subsStatsName} data-field="value" value={subStatValue.value} id={`${subsStatsName}-${discIndex}`} onChange={handlerDriveDiscSubstats(discIndex, subsStatsName, 'value')} />
+                            <div key={subsStatsName} className='disc-subStats-container'>
+                                <span>{subsStatsName}:</span> <input type="number" name={`${discIndex}-${subsStatsName}`} min={0} max={10} data-parent="subStats" data-child={subsStatsName} data-field="value" value={subStatValue.value} id={`${subsStatsName}-${discIndex}`} onChange={handlerDriveDiscSubstats(discIndex, subsStatsName, 'value')} />
                                 <select value={discValue.subsStatsParent[subsStatsName].subType} onChange={handlerDriveDiscSubstats(discIndex, subsStatsName, 'subType')}>
                                     <option value={null}>-- Choose Type --</option>
                                     {subStatTypes.map((type) => (
