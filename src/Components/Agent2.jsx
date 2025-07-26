@@ -252,8 +252,16 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                         <div key={categoryName} id={`${categoryName}`}>
                             <h4 className='character-skills-title'>{scalingName ?? `Unnamed Skill`}</h4>
                             <div className='character-skills-name core'>
-                                <p>{skillsArray[0].description}</p>
-                                <p><strong>DMG Multiplier:</strong> {Math.floor(calculatedStats.agentAttack * (Number(scalingValue.replace('%', '')) / 100))}</p>
+                                {/* <p>{skillsArray[0].description}</p> */}
+                                <p><strong>DMG Multiplier:</strong>{' '}
+                                    {
+                                        (() => {
+                                            const pct = Number(scalingValue.replace('%', ''));
+                                            const dmg = Math.floor(calculatedStats.agentAttack * (pct / 100));
+                                            return isNaN(pct) ? 'Error' : dmg;
+                                        })()
+                                    }
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -282,7 +290,13 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                                             return (
                                                 <div key={scalingIndex} className='character-skills-name'>
                                                     <span>{scalingName}: </span>
-                                                    <strong>{Math.floor(calculatedStats.agentAttack * (Number(scalingValue.replace('%', '')) / 100)) ?? 'N/A'}</strong>
+                                                    {
+                                                        (() => {
+                                                            const pct = Number(scalingValue.replace('%', ''));
+                                                            const dmg = Math.floor(calculatedStats.agentAttack * (pct / 100));
+                                                            return isNaN(pct) ? 'Still in development' : dmg;
+                                                        })()
+                                                    }
                                                 </div>
                                             );
                                         })

@@ -13,6 +13,7 @@ import Footer from './Components/Footer'
 import DescriptionPage from './Components/DescriptionPage'
 import Background1 from './Components/Background1'
 import Background2 from './Components/Background2'
+import Navbar from './Components/Navbar'
 
 function App() {
   const [characterGeneralData, setCharacterGeneralData] = useState({});
@@ -28,6 +29,7 @@ function App() {
   const [isLoadingEnemy, setIsLoadingEnemy] = useState(false);
   const [isLoadingWEngine, setIsLoadingWEngine] = useState(false);
   const [isError, setIsError] = useState(null);
+  const [active, setActive] = useState(null);
   const [wEngineData, setWEngineData] = useState({
     baseAttack: 0,
     level: 0,
@@ -124,6 +126,23 @@ function App() {
       },
     }
   });
+
+  // For highlighting nav link (through viewport)
+  useEffect(() => {
+    const sections = document.querySelectorAll('section[id]');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((index) => {
+          if (index.isIntersecting) {
+            setActive(index.target.id);
+          }
+        })
+      },
+      { rootMargin: '-50% 0px -50% 0px' }
+    );
+    sections.forEach((indexSection) => { observer.observe(indexSection) });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     async function charactersFirstFecth() { // First fetch the character data to dropdown list
@@ -320,13 +339,16 @@ function App() {
 
   return (
     <div>
-      <Header />
-      <WelcomePage />
+      <section id='open-page'>
+        <Header />
+        <WelcomePage />
+      </section>
       <DescriptionPage />
+      <Navbar active={active} />
       {/* Agent Selection */}
-      <div className='page-container'>
+      <section id='Agent' className='page-container'>
         <div className='page-control'>
-          <h1>CHARACTER</h1>
+          <h1>AGENT</h1>
           <select value={isSelectedID} onChange={handleSelectedAgent} disabled={isLoading} className='main-select'>
             <option> -- Choose -- </option>
             {Object.entries(characterGeneralData).map(([id, agentId]) => (
@@ -343,9 +365,9 @@ function App() {
           enemiesData={enemiesData}
         />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
-      </div>
+      </section>
       {/* W-Engine */}
-      <div className='page-container'>
+      <section id='W-Engine' className='page-container'>
         <div className='page-control'>
           <h1>W-ENGINE</h1>
           <select value={isWEngineSelectedID} onChange={handleSelectedWEngine} disabled={!isAgentSelected || isLoadingWEngine} className='main-select'>
@@ -365,9 +387,9 @@ function App() {
           isEnabled={isAgentSelected}
         />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
-      </div>
+      </section>
       {/* Drive Disc */}
-      <div className='page-container'>
+      <section id='Disc' className='page-container'>
         <div className='page-control'>
           <h1>EQUIPMENT</h1>
         </div>
@@ -380,9 +402,9 @@ function App() {
           handlerDriveDiscSubstats={handlerDriveDiscSubstats}
           isEnabled={isAgentSelected}
         />
-      </div>
+      </section>
       {/* Enemy */}
-      <div className='page-container'>
+      <section id='Enemy' className='page-container'>
         <div className='page-control'>
           <h1>Enemy</h1>
           <select value={isEnemiesSelectedID} onChange={handleSelectedEnemy} disabled={isLoadingEnemy} className='main-select'>
@@ -399,7 +421,7 @@ function App() {
           setEnemiesData={setEnemiesData}
         />
         {isError && <p style={{ color: 'red' }}>Error: {isError}</p>}
-      </div>
+      </section>
       <Background2 />
       <Background1 isAgentDetail={isAgentDetail} />
       <Footer />

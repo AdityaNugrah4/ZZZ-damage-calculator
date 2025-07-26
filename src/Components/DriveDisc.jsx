@@ -46,8 +46,10 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
     return (
         <fieldset disabled={!isEnabled}>
             {Object.entries(isSelectedDriveDisc).map(([discIndex, discValue]) => (
-                <div key={discIndex} className='disc-main flex flex-col transition-all'>
-                    <label htmlFor={discIndex}><h3>{discIndex}</h3></label>
+                <div key={discIndex} className='disc-main flex flex-col'>
+                    <label htmlFor={discIndex}>
+                        <h3>{discIndex}</h3>
+                    </label>
                     {/* <select name={discIndex} id={discIndex} value={isSelectedDriveDisc[discIndex]} onChange={handlerSliderDriveDiscLevel} disabled={isLoadingDriveDisc}>
                         <option>0</option>
                         <option>1</option>

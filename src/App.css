@@ -19,6 +19,24 @@
   position: relative;
 }
 
+header {
+  color: var(--main-bg-color-2);
+  background: black;
+  height: 10vh;
+
+}
+
+header img {
+  margin: 10px;
+  height: 40px;
+  transition: all 0.3s;
+}
+
+header img:hover {
+  background: var(--secondary-bg-color-4);
+  border-radius: 10px;
+}
+
 h2 {
   background: linear-gradient(270deg, rgba(0, 255, 30, 0) 0%, var(--agent-accent-color) 100%);
   padding: 4px 10px;
@@ -58,6 +76,70 @@ select {
   color: var(--secondary-bg-color-2);
 }
 
+nav {
+  display: flex;
+  position: fixed;
+  align-items: center;
+  right: 10px;
+  top: 30%;
+  outline: solid 5px var(--agent-secondary-color);
+  outline-offset: 2px;
+  border-radius: 10px 0 0 10px;
+  transition: all 0.3s ease;
+  background: black;
+  text-align: center;
+  font-size: 14px;
+}
+
+nav ul {
+  padding: 0;
+  margin: 0 4px;
+}
+
+nav li {
+  list-style: none;
+  margin: 0;
+  padding: 20px 0;
+  border-bottom: solid 5px var(--agent-secondary-color);
+}
+
+nav li:hover {
+  background: var(--secondary-bg-color-3);
+}
+
+nav li:active {
+  background: var(--secondary-bg-color-1);
+}
+
+nav li:first-child:hover {
+  border-top-left-radius: 10px;
+}
+
+nav li:last-child:hover {
+  border-bottom-left-radius: 10px;
+}
+
+nav li:last-child {
+  border: none;
+}
+
+nav a {
+  list-style: none;
+  color: var(--main-bg-color-2);
+  text-decoration: none;
+}
+
+nav.active {
+  transform: translateX(5vw);
+  opacity: 0.1;
+}
+
+nav a.active {
+  color: var(--secondary-bg-color-4);
+  list-style: none;
+  font-weight: 900;
+}
+
 select.main-select:hover {
   background: var(--secondary-bg-color-4);
   outline: var(--secondary-bg-color-4) solid 8px;
@@ -95,11 +177,13 @@ fieldset {
 
 .welcome-page {
   padding-left: 40px;
-  background: linear-gradient(180deg, var(--color-black) 0%, rgba(0, 255, 30, 0) 100%);
+  background: linear-gradient(180deg, rgb(0, 0, 0) 0%, rgba(0, 0, 0, 0.700) 70%, rgba(0, 255, 30, 0) 100%);
+  height: 100vh;
 }
 
 .welcome-page h1 {
   display: flex;
+  margin: 0 0 0 0;
   flex-direction: column;
   font-size: clamp(5rem, 6.4vw + 1rem, 8rem);
   backdrop-filter: blur(0px);
@@ -113,6 +197,22 @@ fieldset {
   text-shadow: 3px 3px rgba(0, 0, 0, 0.208);
 }
 
+.description-page {
+  padding: 10px;
+  margin: 0 2vw;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease-in-out;
+}
+
+.description-page a {
+  text-decoration: none;
+  color: var(--secondary-bg-color-1);
+}
+
+.description-page a:hover {
+  text-decoration: underline;
+}
+
 .page-container {
   margin: 0 2vw;
   left: 0;
@@ -120,7 +220,7 @@ fieldset {
 }
 
 .page-control {
-  color: var(--main-bg-color-2);
+  color: var(--secondary-bg-color-1);
   font-size: 40px;
   padding: 10px;
   border-radius: 10px;
@@ -140,12 +240,44 @@ footer {
   justify-content: center;
   align-items: center;
   display: flex;
+  flex-direction: column;
   margin-top: 10px;
-  height: 15vh;
   padding: 4vh 2vw;
   bottom: 0;
   background: var(--secondary-bg-color-2);
   color: var(--main-bg-color-2);
+}
+
+.footer-page {
+  right: 1vw;
+  bottom: 1vh;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-page div {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
+footer img {
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  transition: all 0.3s;
+}
+
+footer img:hover {
+  border-radius: calc(infinity * 1px);
+  outline: var(--secondary-bg-color-4) 2px solid;
 }
 
 .ticker {
@@ -273,6 +405,21 @@ footer {
   font-weight: 600;
 }
 
+.disc-main label:first-child {
+  outline: var(--secondary-bg-color-4) solid 4px;
+  margin: 10px 0;
+  padding: 2px 10px;
+  border-top-left-radius: calc(infinity * 1px);
+  border-bottom-left-radius: calc(infinity * 1px);
+  background: linear-gradient(90deg, var(--secondary-bg-color-2) 0%, var(--secondary-bg-color-3) 100%);
+  color: var(--secondary-bg-color-1);
+}
+
+.disc-main label:first-child h3 {
+  transform: skew(-15deg);
+  text-shadow: 3px -3px rgba(0, 0, 0, 0.208);
+}
+
 .disc-main label span {
   background: var(--secondary-bg-color-3);
   outline: 2px solid var(--secondary-bg-color-2);
@@ -291,10 +438,6 @@ footer {
 
 .disc-main:last-child {
   border: none;
-}
-
-.character-skills-title {
-  /* background: linear-gradient(270deg, rgba(0, 255, 30, 0) 0%, var(--agent-primary-color) 100%); */
 }
 
 .agent-not-selected {
