@@ -14,6 +14,9 @@ const Background1 = ({ isAgentDetail }) => {
     // controlling 
     useEffect(() => {
         h2ClassColour(isAgentDetail?.colors);
+        console.log(isAgentDetail?.colors?.accent);
+        console.log(isAgentDetail?.colors?.primary);
+        console.log(isAgentDetail?.colors?.secondary);
     }, [isAgentDetail])
 
     return (

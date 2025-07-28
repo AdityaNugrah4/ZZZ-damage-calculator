@@ -1,4 +1,6 @@
 import React, { use, useEffect, useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
 import './App.css'
 import W_Engine from './Components/W_Engine'
 import Agent2 from './Components/Agent2'
@@ -150,9 +152,11 @@ function App() {
         setIsError(null);
         setIsLoading(true);
         const listID = await AllCharactersIrminsul();
+        console.log('Initial fetched data', listID);
         setCharacterGeneralData(listID);
       } catch (error) {
         setIsError(error.message)
+        console.log(error)
       } finally {
         setIsLoading(false);
       }
@@ -169,10 +173,13 @@ function App() {
       try {
         setIsError(null);
         setIsLoading(true);
+        console.log(isSelectedID);
         const agentDetailObject = characterGeneralData?.[isSelectedID] // To set the the data without converting it first using Object.[values, or key ,or entries]
         setIsAgentDetail(agentDetailObject);
+        console.log(agentDetailObject)
       } catch (error) {
         setIsError(error.message);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -186,9 +193,11 @@ function App() {
         setIsError(null);
         setIsLoadingEnemy(true);
         const enemiesListID = await AllEnemies();
+        console.log('Initial fetched data', enemiesListID);
         setEnemiesGeneralData(enemiesListID);
       } catch (error) {
         setIsError(error.message);
+        console.log(error);
       } finally {
         setIsLoadingEnemy(false);
       }
@@ -205,10 +214,13 @@ function App() {
       try {
         setIsError(null);
         setIsLoadingEnemy(true);
+        console.log(isEnemiesSelectedID);
         const fetchedEnemydetail = await EnemyDetail(isEnemiesSelectedID);
+        console.log(fetchedEnemydetail);
         setIsEnemiesDetail(fetchedEnemydetail);
       } catch (error) {
         setIsError(error.message);
+        console.log(error);
       } finally {
         setIsLoadingEnemy(false);
       }
@@ -222,9 +234,11 @@ function App() {
         setIsError(false);
         setIsLoadingWEngine(true);
         const listID = await AllEngine();
+        console.log(listID);
         setWEngineGeneralData(listID);
       } catch (error) {
         setIsError(error.message);
+        console.log(error);
       } finally {
         setIsLoadingWEngine(false);
       }
@@ -240,10 +254,13 @@ function App() {
       try {
         setIsError(null);
         setIsLoadingWEngine(true);
+        console.log(isWEngineSelectedID);
         const fetchedWEngineDetail = await wEngineGeneralData?.[isWEngineSelectedID];
+        console.log(fetchedWEngineDetail);
         setIsWEngineDetail(fetchedWEngineDetail);
       } catch (error) {
         setIsError(error.message);
+        console.log(error);
       } finally {
         setIsLoadingWEngine(false);
       }

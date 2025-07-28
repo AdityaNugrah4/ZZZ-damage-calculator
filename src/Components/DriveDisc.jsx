@@ -31,8 +31,10 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
                 setIsError(null);
                 setIsLoadingDriveDisc(true);
                 const listDriveDisc = await allDriveDisc();
+                console.log(listDriveDisc)
             } catch (error) {
                 setIsError(error.message);
+                console.log(error)
             } finally {
                 setIsLoadingDriveDisc(false);
             }
@@ -64,7 +66,7 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
                     <label>
                         <span>Main Stats:</span>
                         <input name={discIndex} value={discValue.mainStats} type="number" min={0} max={10} data-field="mainStats" onChange={handlerDriveDiscMainStats} />
-                        <select name={`${isSelectedDriveDisc[discIndex]} Type`} value={discValue.mainType} onChange={handlerDriveDiscMainType}>
+                        <select name={discIndex} value={discValue.mainType} onChange={handlerDriveDiscMainType}>
                             <option>-- Select Stat Type --</option>
                             {mainStatTypes.map(name => (
                                 <option key={name} value={name}>{name}</option>
@@ -74,7 +76,7 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
                     <hr />
                     <div>
                         <span>Sub Stats:</span>
-                        {Object.entries(discValue.subsStatsParent).map(([subsStatsName, subStatValue]) => (
+                        {discValue.subsStatsParent && Object.entries(discValue.subsStatsParent).map(([subsStatsName, subStatValue]) => (
                             <div key={subsStatsName} className='disc-subStats-container'>
                                 <span>{subsStatsName}:</span> <input type="number" name={`${discIndex}-${subsStatsName}`} min={0} max={10} data-parent="subStats" data-child={subsStatsName} data-field="value" value={subStatValue.value} id={`${subsStatsName}-${discIndex}`} onChange={handlerDriveDiscSubstats(discIndex, subsStatsName, 'value')} />
                                 <select value={discValue.subsStatsParent[subsStatsName].subType} onChange={handlerDriveDiscSubstats(discIndex, subsStatsName, 'subType')}>
