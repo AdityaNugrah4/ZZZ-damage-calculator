@@ -26,9 +26,6 @@ const W_Engine = ({ wEngineData, setWEngineData, isWEngineDetail, isLoadingWEngi
             specialityType: null
         }
 
-        console.log(isWEngineDetail.stats.subStat);
-        console.log(isWEngineDetail?.stats?.mainStat?.value);
-
         if (isWEngineDetail.rarity === 'B') {
             calculatedStats.baseAttack = wEngineStatsScale?.rank_B?.type1?.statsScalling[userSliderWEngineLevel + 1].baseStats;
             calculatedStats.specialityValue = wEngineStatsScale.rank_B.speciallityType[isWEngineDetail.stats.subStat][userSliderWEngineLevel] / 100;
@@ -41,14 +38,12 @@ const W_Engine = ({ wEngineData, setWEngineData, isWEngineDetail, isLoadingWEngi
             calculatedStats.baseAttack = wEngineStatsScale?.rank_S?.[typeKey]?.statsScalling[userSliderWEngineLevel + 1].baseStats;
             calculatedStats.specialityValue = wEngineStatsScale.rank_S.speciallityType[isWEngineDetail.stats.subStat][userSliderWEngineLevel] / 100;
         } else {
-            console.log("No matching W-Engine stat block found.")
             return null
         };
 
         calculatedStats.specialityType = isWEngineDetail?.stats?.subStat;
         calculatedStats.level = wEngineStatsScale.levelWeapon[userSliderWEngineLevel + 1].Level; // +1 because it start from '1' instead of '0'
 
-        console.log(wEngineData.speciality)
         return calculatedStats;
 
     }, [isWEngineDetail, userSliderWEngineLevel])

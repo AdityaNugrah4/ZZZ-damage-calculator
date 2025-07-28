@@ -14,9 +14,6 @@ const CharacterBaseStats = () => {
                 setIsError(null);
                 setIsLoading(true);
                 const listData = await getAllCharacters();
-
-                console.log("Fetched All Agents List:", listData);
-
                 setIsCharacterList(listData);
             } catch (err) {
                 setIsError(err.message);
@@ -40,8 +37,6 @@ const CharacterBaseStats = () => {
                 setIsError(null);
                 setIsLoading(true);
                 const detailData = await getCharacterDetails(isSelectedID);
-
-                console.log("Fetched Single Agent's Details:", detailData);
 
                 setIsDetails(detailData);
             } catch (err) {

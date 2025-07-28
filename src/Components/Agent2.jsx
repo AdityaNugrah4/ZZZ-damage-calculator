@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { skillsIcon } from './SkillsIcon';
 
 const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, enemiesData }) => {
 
     const [userSliderAgentLevel, setUserSliderAgentLevel] = useState(0);
-    const [userSliderAgentSkillLevel, setUserSliderAgentSkillLevel] = useState(0);
     const [userAgentSpecificSkillLevels, SetUserAgentSpecificSkillLevels] = useState({
         basic: 0,
         dodge: 0,
@@ -19,7 +18,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             return null
         };
 
-        console.log(isAgentDetail.stats.hp);
         const { stats } = isAgentDetail;
 
         if (userSliderAgentLevel < 0 || userSliderAgentLevel >= (stats.hp?.length ?? 0)) {
@@ -47,7 +45,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             return null
         };
 
-        console.log(isAgentDetail.stats.hp);
         const { stats } = isAgentDetail;
 
         if (userSliderAgentLevel < 0 || userSliderAgentLevel >= (stats.hp?.length ?? 0)) {
@@ -71,7 +68,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             };
 
             const ascensionIndex = getAscensionndex(userSliderAgentLevel);
-            console.log(`Slider index: ${userSliderAgentLevel}, Ascension bonus index: ${ascensionIndex}`);
 
             if (ascensionIndex !== null) {
                 if ('CRIT Rate' in ascension) {
@@ -91,9 +87,8 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                     calculatedStats.agentAnomalyProficiency += (ascension['Anomaly Proficiency'][ascensionIndex])
                 } else {
                     // If none of our target keys were found, return null.
-                    console.log("No specific bonus ascension stat found.");
+                    return null
                 };
-                console.log(ascensionIndex);
             }
         };
 
@@ -150,7 +145,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         } else return null;
 
         // Stats calculated from Disc Drive and W-Engine
-        console.log('Total from all disc drive:', totalFromDisc);
         calculatedStats.agentAttack += totalFromDisc["ATK"];
         calculatedStats.agentDefence += totalFromDisc["DEF"];
         calculatedStats.agentHP += totalFromDisc["HP"];
@@ -167,32 +161,12 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         calculatedStats.agentAnomalyMastery += calculatedStats.agentAnomalyMastery * (totalFromDisc['Anomaly Mastery%'] / 100); // Anomaly Mastery %
         calculatedStats.agentAnomalyProficiency += totalFromDisc['Anomaly Proficiency']; // Flat Anomaly Proficiency
 
-        /*function arrayIndex(i) {
-            if (i < 4) {
-                return 0
-            } else {
-                return 1 + Math.floor((i - 4) / 2)
-            }
-        };
-
-        const statsAscension = isAgentDetail?.stats?.ascension;
-
-        if ('CRIT Rate' in statsAscension) {
-            calculatedStats.agentCritRate += statsAscension['CRIT Rate'][arrayIndex(userSliderAgentLevel)];
-            console.log([arrayIndex(userSliderAgentLevel)]);
-            // future me, there are still a bug in this function. for starter the crit start from 480 when supposedly start from 0 and you still has to convert this by multiply it with 1/100.
-        } else {
-            // If none of our target keys were found, return null.
-            console.log("No specific bonus ascension stat found.");
-        }; */
-
         return calculatedStats;
     }, [isAgentDetail, userSliderAgentLevel, isSelectedDriveDisc, wEngineData]);
 
     const scalledAgentLevel = useMemo(() => {
         const scalledLevel = ['1/10', '10/10', '10/20', '20/20', '20/30', '30/30', '30/40', '40/40', '40/50', '50/50', '50/60', '60/60'];
         const calculatedLevel = scalledLevel[userSliderAgentLevel]
-        console.log(calculatedLevel);
         return calculatedLevel;
     }, [isAgentDetail, userSliderAgentLevel]);
 
@@ -214,22 +188,11 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             return <p className='agent-not-selected'>No agent have been choosen.</p>;
         }
 
-        const handleSliderAgentSkillLevel = (event) => { // This still need to change since it was universal for all skill and not specific // Done, can be deleted
-            if (!isAgentDetail) {
-                return console.log('The agent has not been selected yet.')
-            };
-
-            const levelSkillChange = event.target.value;
-            const currentAgentSkill = parseInt(levelSkillChange, 10);
-            setUserSliderAgentSkillLevel(currentAgentSkill);
-        }
-
         return Object.keys(isAgentDetail.skills).map((categoryName) => {
             const skillsArray = isAgentDetail.skills[categoryName];
             const currentAgentSkillLevel = userAgentSpecificSkillLevels[categoryName];
 
             if (!Array.isArray(skillsArray) || skillsArray === 0) {
-                console.log('skillsArray has issue!')
                 return null
             };
 
@@ -313,30 +276,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         })
     }, [isAgentDetail, userAgentSpecificSkillLevels, userSliderAgentLevel, wEngineData]);
 
-    // const calculatingAscensionSpecificStat = useMemo(() => {
-    //     if (!isAgentDetail?.stats?.ascension) {
-    //         return null
-    //     };
-    //     const statsAscension = isAgentDetail?.stats?.ascension;
-    //     if ('CRIT Rate' in statsAscension) {
-    //         agentCritRate + statsAscension['CRIT Rate'][0]
-    //     } else {
-    //         // If none of our target keys were found, return null.
-    //         console.log("No specific bonus ascension stat found.");
-    //         return null;
-    //     }
-    // }, [isAgentDetail])
-
-    /* const agentHP = isAgentDetail?.stats?.hp?.[userSliderAgentLevel]; // ascension
-    const agentAttack = isAgentDetail?.stats?.atk?.[userSliderAgentLevel]; // ascension
-    const agentDefence = isAgentDetail?.stats?.def?.[userSliderAgentLevel]; // ascension
-    const agentImpact = isAgentDetail?.stats?.impact?.[userSliderAgentLevel]; // ascension
-    const agentCritRate = 0; // ascension
-    const agentCritDamage = 0;
-    const agentAnomalyMastery = isAgentDetail?.stats?.am?.[userSliderAgentLevel];
-    const agentAnomalyProficiency = isAgentDetail?.stats?.ap?.[userSliderAgentLevel]; // ascension
-    const agentPenetration = (isAgentDetail?.stats?.pen?.[userSliderAgentLevel] ?? 0) / 100;
-    const agentEnergyRegen = isAgentDetail?.stats?.er?.[userSliderAgentLevel]; // ascension */
 
 
     const handleSliderAgentLevel = (event) => { // Handle slider that control level
@@ -347,16 +286,8 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         const levelAgentChange = event.target.value;
         const currentAgentLevel = parseInt(levelAgentChange, 10);
         setUserSliderAgentLevel(currentAgentLevel);
-        console.log(currentAgentLevel);
     };
 
-    // function card(index) {
-    //     const list = [];
-    //     for (let i = 0; i < 3; i++) {
-    //         list.push(<span key={i}>{index}</span>)
-    //     }
-    //     return list
-    // };
 
     return (
         <fieldset>
@@ -417,37 +348,6 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                 <h2>Character Skills</h2>
                 {skillsAgentSection}
 
-                {/* This is for documentation only */}
-                {/* <span>
-                    <h3>Basic Attack</h3>
-                </span>
-                <div>
-                    {isAgentDetail && isAgentDetail.skills.basic.map((skillObject, index) => {
-                        return (
-                            <div>
-                                <h4 key={index}>
-
-                                    {skillObject.name ?? `Unnamed Skill #${index + 1}`}
-                                </h4>
-                                {Array.isArray(skillObject.scaling) && skillObject.scaling.length > 0 ? (
-                                    skillObject.scaling.map((scalingData, scalingIndex) => {
-                                        const scalingName = scalingData[0];
-                                        const scalingValue = scalingData[userSliderAgentSkillLevel + 1];
-                                        return (
-                                            <div key={scalingIndex}>
-                                                <span>{scalingName}: </span>
-                                                <strong>{scalingValue ?? 'N/A'}</strong>
-                                            </div>
-                                        );
-                                    })
-                                ) : (
-                                    // If FALSE, we render a fallback message.
-                                    <p>{(skillObject?.description ?? '').replaceAll('<br />', ' ')}</p>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div> */}
             </div>
         </fieldset>
     )

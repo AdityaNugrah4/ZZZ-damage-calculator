@@ -31,17 +31,14 @@ const DriveDisc = ({ setIsSelectedDriveDisc, isSelectedDriveDisc, handlerDriveDi
                 setIsError(null);
                 setIsLoadingDriveDisc(true);
                 const listDriveDisc = await allDriveDisc();
-                console.log(listDriveDisc)
             } catch (error) {
                 setIsError(error.message);
-                console.log(error)
             } finally {
                 setIsLoadingDriveDisc(false);
             }
         };
         firstDriveDiscFetch();
     }, []);
-    console.log(isSelectedDriveDisc.disc1.subsStatsParent.subStats1.value)
 
     return (
         <fieldset disabled={!isEnabled}>

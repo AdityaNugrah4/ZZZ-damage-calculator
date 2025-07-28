@@ -38,7 +38,6 @@ const Enemy = ({ isEnemiesDetail, isLoadingEnemy, setEnemiesData }) => {
 
     const handleSliderEnemyLevel = (event) => {
         if (!isEnemiesDetail) {
-            return console.log('No enemy has been selected.')
         }
         const response = event.target.value;
         const levelChange = parseInt(response, 10);

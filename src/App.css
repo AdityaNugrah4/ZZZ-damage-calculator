@@ -627,3 +627,66 @@ h4.character-skills-title {
     transform: translateY(0);
   }
 }
+
+@media (max-width: 768px) {
+  .welcome-page h1 {
+    display: flex;
+    margin: 0 0 0 0;
+    flex-direction: column;
+    font-size: clamp(5rem, 6.4vw + 1rem, 5rem);
+    backdrop-filter: blur(0px);
+    text-shadow: 15px 15px rgba(0, 0, 0, 0.208);
+    color: transparent;
+    -webkit-text-stroke: 4px var(--main-bg-color-2);
+  }
+
+  select.main-select {
+    background: var(--agent-accent-color);
+    color: var(--agent-secondary-color);
+    margin-bottom: 20px;
+    margin-left: 20px;
+    font-size: 0.8rem;
+    font-weight: bolder;
+    outline: var(--agent-primary-color) solid 4px;
+    outline-offset: 4px;
+  }
+
+  .page-container {
+    margin: 0 2vw;
+    left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 425px) {
+  .welcome-page h1 {
+    display: flex;
+    margin: 0 0 0 0;
+    flex-direction: column;
+    font-size: 50px;
+    backdrop-filter: blur(0px);
+    text-shadow: 15px 15px rgba(0, 0, 0, 0.208);
+    color: transparent;
+    -webkit-text-stroke: 4px var(--main-bg-color-2);
+  }
+
+  select.main-select {
+    background: var(--agent-accent-color);
+    color: var(--agent-secondary-color);
+    margin-bottom: 20px;
+    margin-left: 20px;
+    font-size: 0.8rem;
+    font-weight: bolder;
+    outline: var(--agent-primary-color) solid 4px;
+    outline-offset: 4px;
+  }
+
+  .page-container {
+    margin: 0 2vw;
+    width: 100vw;
+  }
+
+  .page-control {
+    width: 100%;
+  }
+}
