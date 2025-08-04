@@ -24,9 +24,17 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
             return {};
         };
 
+        let enemyReduce = 0; // This part for enemy stats
+        if (enemyReduce === 0) {
+            enemyReduce = 0.9
+        } else {
+            // this part will be filled with enemy stats
+        }
+        console.log(enemyReduce);
+
         const calculatedStats = {
             agentHP: isAgentDetail?.stats?.hp?.[userSliderAgentLevel], // ascension
-            agentAttack: isAgentDetail?.stats?.atk?.[userSliderAgentLevel], // ascension
+            agentAttack: Math.floor(isAgentDetail?.stats?.atk?.[userSliderAgentLevel] * enemyReduce), // ascension
             agentDefence: isAgentDetail?.stats?.def?.[userSliderAgentLevel], // ascension
             agentImpact: isAgentDetail?.stats?.impact?.[userSliderAgentLevel], // ascension
             agentCritRate: 5, // ascension
