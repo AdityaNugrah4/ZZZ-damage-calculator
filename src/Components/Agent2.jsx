@@ -33,6 +33,7 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
         console.log(enemyReduce);
 
         const calculatedStats = {
+            agentType: isAgentDetail?.element,
             agentHP: isAgentDetail?.stats?.hp?.[userSliderAgentLevel], // ascension
             agentAttack: Math.floor(isAgentDetail?.stats?.atk?.[userSliderAgentLevel] * enemyReduce), // ascension
             agentDefence: isAgentDetail?.stats?.def?.[userSliderAgentLevel], // ascension
@@ -305,6 +306,7 @@ const Agent2 = ({ isAgentDetail, isLoading, isSelectedDriveDisc, wEngineData, en
                 <div className='flex flex-col'>
                     <div className='agent-name-description'>
                         <h3>Agent: {isAgentDetail?.fullName}</h3>
+                        <h3>Type: {isAgentDetail?.element}</h3>
                         <h3>{isAgentDetail?.faction.toUpperCase()}</h3>
                         <h1>{isAgentDetail?.name.toUpperCase()}</h1>
                         <div className='agent-name-description-card'>

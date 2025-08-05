@@ -475,7 +475,7 @@ footer img:hover {
   color: var(--agent-accent-color);
 }
 
-.agent-name-description :nth-child(4) {
+.agent-name-description :nth-child(5) {
   position: absolute;
   height: 100%;
   background: white;
